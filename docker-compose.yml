@@ -1,0 +1,25 @@
+version: "2"
+services:
+  db:
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=test
+    ports:
+      - 3306:3306
+    volumes:
+      - ./database:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      - PMA_HOST=db
+      - UPLOAD_LIMIT= 300M
+    restart: always
+    ports:
+      - 8081:80
+    volumes:
+      - /sessions
+      - ./php-make/upload.ini:/usr/local/etc/php/php.ini
+    links:
+      - db
